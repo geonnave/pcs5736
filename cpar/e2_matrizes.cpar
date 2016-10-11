@@ -1,0 +1,102 @@
+#include <stdio.h>
+
+#define N 100
+
+shared double a[N][N];
+shared double b[N][N];
+shared double c[N][N];
+shared double d[N][N];
+
+shared double a_b[N][N];
+shared double c_d[N][N];
+
+shared double res[N][N];
+
+task spec init_a();
+task body init_a() {
+  int i, j;
+  for(i = 0; i < N; i++) {
+    for(j = 0; j < N; j++) {
+      a_b[i][j] = 0;
+      c_d[i][j] = 0;
+      a[i][j] = (double)(i + j);
+    }
+  }
+}
+
+task spec init_b();
+task body init_b() {
+  int i, j;
+  for(i = 0; i < N; i++)
+    for(j = 0; j < N; j++)
+      b[i][j] = i + 2*j;
+}
+
+task spec init_c();
+task body init_c() {
+  int i, j;
+  for(i = 0; i < N; i++)
+    for(j = 0; j < N; j++)
+      c[i][j] = 2*i + 3*j;
+}
+
+task spec init_d();
+task body init_d() {
+  int i, j;
+  for(i = 0; i < N; i++)
+    for(j = 0; j < N; j++)
+      d[i][j] = 2*i + j;
+}
+
+task spec multiply_ab();
+task body multiply_ab() {
+  int i, j, k;
+  for(i = 0; i < N; i++)
+    for(j = 0; j < N; j++)
+      for(k = 0; k < N; k++)
+        a_b[i][j] = a_b[i][j] + a[i][k]*b[k][j];
+}
+task spec multiply_cd();
+task body multiply_cd() {
+  int i, j, k;
+  for(i = 0; i < N; i++)
+    for(j = 0; j < N; j++)
+      for(k = 0; k < N; k++)
+        c_d[i][j] = c_d[i][j] + c[i][k]*d[k][j];
+}
+
+task spec sum_res();
+task body sum_res() {
+  int i, j;
+  forall i=0 to N-1 {
+    for(j = 0; j < N; j++)
+      res[i][j] = c_d[i][j] + c_d[i][j];
+  }
+}
+
+main() {
+  int i, j;
+  printf(">>>begin main\n");
+
+  create 1, init_a();
+  create 1, init_b();
+  create 1, init_c();
+  create 1, init_d();
+  wait_all();
+
+  create 1, multiply_ab();
+  create 1, multiply_cd();
+  wait_all();
+
+  create 4, sum_res();
+  wait_all();
+
+  for(i = 0; i < N; i++) {
+    for(j = 0; j < N; j++) {
+      printf("%5.0lf ", res[i][j]);
+    }
+    printf("\n");
+  }
+
+  printf(">>>end main\n");
+}

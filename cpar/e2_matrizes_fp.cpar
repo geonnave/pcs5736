@@ -1,0 +1,31 @@
+#include <stdio.h>
+
+#define N 100
+
+int init_a(i, j)
+int i, j;
+{
+  return i + j;
+}
+
+task spec init(fun);
+task body init(fun)
+int (*fun)(int, int);
+{
+  int a[N][N];
+  int i, j;
+  for(i = 0; i < N; i++)
+    for(j = 0; j < N; j++)
+      a[i][j] = fun(i, j);
+}
+
+shared int a[N][N];
+shared int b[N][N];
+shared int c[N][N];
+shared int d[N][N];
+
+main() {
+  printf(">>>begin main\n");
+  create 1, init(&init_a);
+  printf(">>>end main\n");
+}

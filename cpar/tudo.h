@@ -1,3 +1,3 @@
-#include "type_e1_blocos.h"  /* typedef's */
-#include "vsg_e1_blocos.h"   /* shared global  */
-#include "vst_e1_blocos.h"   /* shared task */
+#include "type_e2_matrizes.h"  /* typedef's */
+#include "vsg_e2_matrizes.h"   /* shared global  */
+#include "vst_e2_matrizes.h"   /* shared task */
