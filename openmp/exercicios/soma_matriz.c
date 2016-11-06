@@ -27,15 +27,12 @@ int main()
   printm(b);
 
   omp_set_num_threads(2);
-  #pragma omp parallel private(i, j) shared(res)
+  #pragma omp parallel for private(i, j) shared(res)
+  for (i = 0; i < N; i++)
   {
-    printf("Thread nº %d\n",omp_get_thread_num());
-    #pragma omp for
-    for (i = 0; i < N; i++)
-    {
-      for (j = 0; j < N; j++) {
-        res[i][j] += a[i][j] + b[i][j];
-      }
+    printf("Thread nº %d\n", omp_get_thread_num());
+    for (j = 0; j < N; j++) {
+      res[i][j] += a[i][j] + b[i][j];
     }
   }
 
