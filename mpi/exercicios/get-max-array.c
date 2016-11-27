@@ -22,18 +22,22 @@ int main(int argc, char** argv) {
     if (world_rank == 0)
         for (i = 0; i < N; i++)
             a[i] = i;
+    if (world_rank == 0)
+        for (i = 0; i < N; i++)
+            printf("%3d", a[i]);
 
     MPI_Scatter(a, e_per_proc, MPI_INT, partial_a, e_per_proc, MPI_INT, 0, MPI_COMM_WORLD);
 
     MPI_Reduce(partial_a, partial_res, e_per_proc, MPI_INT, MPI_MAX, 0, MPI_COMM_WORLD);
 
-    result = partial_res[0];
-    for (i = 1; i < e_per_proc; i++)
-        if (partial_res[i] > result)
-            result = partial_res[i];
+    if (world_rank == 0) {
+        result = partial_res[0];
+        for (i = 1; i < e_per_proc; i++)
+            if (partial_res[i] > result)
+                result = partial_res[i];
 
-    if (world_rank == 0)
-        printf("MAX is %d\n", result);
+        printf("\nMAX is %d\n", result);
+    }
 
     MPI_Finalize();
 }
