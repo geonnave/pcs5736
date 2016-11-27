@@ -20,9 +20,9 @@ void tarefa1() {
     MPI_Buffer_attach(buf, buf_size);
     for (i = 0; i < N; i++) {
         for (j = 0; j < N; j++) {
-            X[i][j] = 1;
+            X[i][j] = i;
         }
-        MPI_Bsend(X[i], N, MPI_INT, collector_rank, 0, MPI_COMM_WORLD);
+        MPI_Bsend(X[i], N, MPI_INT, collector_rank, i, MPI_COMM_WORLD);
     }
     MPI_Buffer_detach(&buf, &buf_size);
 }
@@ -39,9 +39,9 @@ void tarefa2() {
     MPI_Buffer_attach(buf, buf_size);
     for (i = 0; i < N; i++) {
         for (j = 0; j < N; j++) {
-            Y[i][j] = 2;
+            Y[i][j] = 1;
         }
-        MPI_Bsend(Y[i], N, MPI_INT, collector_rank, 0, MPI_COMM_WORLD);
+        MPI_Bsend(Y[i], N, MPI_INT, collector_rank, i, MPI_COMM_WORLD);
     }
     MPI_Buffer_detach(&buf, &buf_size);
 }
@@ -58,9 +58,9 @@ void tarefa3() {
     MPI_Buffer_attach(buf, buf_size);
     for (i = 0; i < N; i++) {
         for (j = 0; j < N; j++) {
-            Z[i][j] = 3;
+            Z[i][j] = 0;
         }
-        MPI_Bsend(Z[i], N, MPI_INT, collector_rank, 0, MPI_COMM_WORLD);
+        MPI_Bsend(Z[i], N, MPI_INT, collector_rank, i, MPI_COMM_WORLD);
     }
     MPI_Buffer_detach(&buf, &buf_size);
 }
@@ -71,9 +71,9 @@ void tarefa4() {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     printf("Hello from rank %d\n", rank);
     for (i = 0; i < N; i++) {
-        MPI_Recv(x, N, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        MPI_Recv(y, N, MPI_INT, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        MPI_Recv(z, N, MPI_INT, 2, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Recv(x, N, MPI_INT, 0, i, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Recv(y, N, MPI_INT, 1, i, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Recv(z, N, MPI_INT, 2, i, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         for (j = 0; j < N; j++) {
             W[i][j] = x[j] + y[j] + z[j];
             printf("%3d", W[i][j]);
