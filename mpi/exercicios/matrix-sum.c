@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define N 10
+#define N 100
 
 int X[N][N], Y[N][N], Z[N][N], W[N][N];
 int collector_rank = 3;
@@ -76,7 +76,7 @@ void tarefa4() {
         MPI_Recv(z, N, MPI_INT, 2, i, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         for (j = 0; j < N; j++) {
             W[i][j] = x[j] + y[j] + z[j];
-            printf("%3d", W[i][j]);
+            printf("%4d", W[i][j]);
         }
         printf("\n");
     }
