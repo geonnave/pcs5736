@@ -35,20 +35,16 @@ int main()
         {
             #pragma omp section
             {
-                for (i = 0; i < N; i++) {
-                    for (j = 0; j < N; j++) {
+                for (i = 0; i < N; i++)
+                    for (j = 0; j < N; j++)
                         X[i][j] = A[i][j] * B[i][j];
-                    }
-                }
             }
 
             #pragma omp section
             {
-                for (i = 0; i < N; i++) {
-                    for (j = 0; j < N; j++) {
+                for (i = 0; i < N; i++)
+                    for (j = 0; j < N; j++)
                         Y[i][j] = C[i][j] * -1;
-                    }
-                }
             }
         }
 
@@ -57,9 +53,8 @@ int main()
         #pragma omp for // pipeline #2
         for (i = 0; i < N; i++)
         {
-            for (j = 0; j < N; j++) {
+            for (j = 0; j < N; j++)
                 Z[i][j] = X[i][j] + Y[i][j];
-            }
         }
     }
 
