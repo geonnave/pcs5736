@@ -14,10 +14,6 @@ void printm(int m[N][N]) {
     printf("\n");
 }
 
-int return_1() {
-    return 1;
-}
-
 int main()
 {
     int A[N][N], B[N][N], C[N][N], X[N][N], Y[N][N], Z[N][N];
@@ -31,12 +27,11 @@ int main()
         }
     }
 
-
     #pragma omp parallel num_threads(2) shared(A, B, C, X, Y, Z) private(i, j)
     {
         printf("Thread nº %d\n", omp_get_thread_num());
 
-        #pragma omp sections
+        #pragma omp sections // pipeline #1
         {
             #pragma omp section
             {
@@ -57,9 +52,9 @@ int main()
             }
         }
 
-        #pragma omp barrier
+        #pragma omp barrier // wait for #1 to finish
 
-        #pragma omp for
+        #pragma omp for // pipeline #2
         for (i = 0; i < N; i++)
         {
             for (j = 0; j < N; j++) {
